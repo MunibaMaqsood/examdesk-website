@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ExamDesk – Create and conduct exams</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f2f4f8;--card:#fff;--ink:#101828;--mute:#5b6577;--line:#d9dee8;--acc:#2f5bea;--acc-ink:#fff;--ok:#157a55;--bad:#b83227;--warn:#b26a00;--ok-bg:#e3f5ec;--bad-bg:#fbe9e7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1420;--card:#161e2e;--ink:#e8ecf4;--mute:#9aa5b8;--line:#2a3550;--acc:#6f93ff;--acc-ink:#0e1420;--ok:#4fcf9a;--bad:#ff8f84;--warn:#f0b24a;--ok-bg:#12302a;--bad-bg:#3a1c1b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1420;--card:#161e2e;--ink:#e8ecf4;--mute:#9aa5b8;--line:#2a3550;--acc:#6f93ff;--acc-ink:#0e1420;--ok:#4fcf9a;--bad:#ff8f84;--warn:#f0b24a;--ok-bg:#12302a;--bad-bg:#3a1c1b;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Bitter,Georgia,serif;line-height:1.2;margin:0 0 .5rem}
+h1{font-size:2rem}h2{font-size:1.4rem}h3{font-size:1.1rem}
+header.top{background:var(--card);border-bottom:1px solid var(--line)}
+.bar{max-width:980px;margin:0 auto;padding:.8rem 1rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{font:700 1.3rem Bitter,Georgia,serif}
+nav{display:flex;gap:.25rem}
+nav button{background:none;border:0;color:var(--mute);font:500 .95rem inherit;font-family:inherit;padding:.5rem .8rem;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--acc);color:var(--acc-ink)}
+main{max-width:980px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.2rem;margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
+.mute{color:var(--mute)}.sm{font-size:.88rem}
+button.b,a.b{background:var(--acc);color:var(--acc-ink);border:1px solid var(--acc);border-radius:8px;padding:.55rem 1rem;font:600 .95rem "Public Sans",sans-serif;cursor:pointer}
+button.g{background:none;color:var(--ink);border-color:var(--line)}
+button.d{background:none;color:var(--bad);border-color:var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.55rem .7rem}
+label{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.row>.f{flex:1;min-width:140px}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:.1rem .65rem;font-size:.82rem;color:var(--mute);margin-right:.3rem}
+.opt{display:flex;gap:.7rem;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0;cursor:pointer;background:var(--bg)}
+.opt input{width:auto;margin-top:.3rem}
+.opt.sel{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.exam{display:grid;grid-template-columns:1fr 230px;gap:1rem}
+@media(max-width:720px){.exam{grid-template-columns:1fr}h1{font-size:1.6rem}}
+.pal{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
+.pal button{padding:.4rem 0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer;font-weight:600}
+.pal button.ans{background:var(--ok-bg);border-color:var(--ok)}.pal button.fl{border-color:var(--warn);box-shadow:inset 0 -3px 0 var(--warn)}.pal button.cur{outline:2px solid var(--acc)}
+#tm{font:700 1.6rem Bitter,Georgia,serif;font-variant-numeric:tabular-nums}#tm.low{color:var(--bad)}
+.score{font:700 3.2rem Bitter,Georgia,serif}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.55rem .5rem;border-bottom:1px solid var(--line);font-size:.92rem}
+.wrap{overflow-x:auto}
+.pass{color:var(--ok);font-weight:600}.fail{color:var(--bad);font-weight:600}
+.hero{padding:1.5rem 0 1rem}.hero p{max-width:60ch;font-size:1.08rem}
+</style>
+</head>
+<body>
+<header class="top"><div class="bar"><div class="brand">ExamDesk</div><nav id="nav"></nav></div></header>
+<main id="app"></main>
+<script>
+const K='examdesk.v1';let mem=null;
+const seed={id:'s1',title:'General knowledge sampler',subject:'Sample exam',mins:5,pass:50,qs:[
+{t:'mcq',q:'Which planet is closest to the Sun?',o:['Venus','Mercury','Mars','Earth'],a:1,m:1},
+{t:'tf',q:'Water boils at 100 °C at sea level.',a:0,m:1},
+{t:'short',q:'What is the capital of Pakistan?',a:'Islamabad',m:2},
+{t:'mcq',q:'What is the value of 7 × 8?',o:['54','56','63','64'],a:1,m:1}]};
+function load(){try{const r=localStorage.getItem(K);if(r)return JSON.parse(r)}catch(e){}return mem}
+let D=load()||{exams:[seed],results:[]};
+function save(){mem=D;try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let view='exams',draft=null,S=null,timer=null,lastRes=null;
+function nav(v){if(S&&!confirm('Leave the exam? Your answers will be lost.'))return;stop();S=null;view=v;if(v==='create'&&!draft)newDraft();render()}
+function stop(){if(timer){clearInterval(timer);timer=null}}
+function render(){
+ $('#nav').innerHTML=S?'':[['exams','Exams'],['create','Create exam'],['results','Results']].map(([k,l])=>`<button class="${view===k?'on':''}" onclick="nav('${k}')">${l}</button>`).join('');
+ const f={exams:vExams,create:vCreate,results:vResults,take:vTake,done:vDone,start:vStart}[view];$('#app').innerHTML=f();if(view==='take')tick();window.scrollTo(0,0)}
+function total(e){return e.qs.reduce((s,q)=>s+(+q.m||1),0)}
+function vExams(){
+ const list=D.exams.map(e=>`<div class="card"><h3>${esc(e.title)}</h3><p class="mute sm">${esc(e.subject||'')}</p><p><span class="pill">${e.qs.length} questions</span><span class="pill">${e.mins} min</span><span class="pill">Pass ${e.pass}%</span></p><div class="row"><button class="b" onclick="openStart('${e.id}')">Start exam</button><button class="d" onclick="delExam('${e.id}')">Delete</button></div></div>`).join('');
+ return `<div class="hero"><h1>Run any exam, from one page.</h1><p>Build quizzes with multiple choice, true or false, and short answer questions. Students take them against a timer and see their marks straight away.</p></div>`+(list?`<div class="grid">${list}</div>`:`<div class="card"><p>No exams yet.</p><button class="b" onclick="nav('create')">Create your first exam</button></div>`)}
+function delExam(id){if(confirm('Delete this exam?')){D.exams=D.exams.filter(e=>e.id!==id);save();render()}}
+function openStart(id){view='start';S=null;lastRes=id;render()}
+function vStart(){const e=D.exams.find(x=>x.id===lastRes);return `<div class="card" style="max-width:520px"><h2>${esc(e.title)}</h2><p class="mute">${e.qs.length} questions, ${total(e)} marks, ${e.mins} minutes. The exam submits itself when time runs out.</p><label for="nm">Your full name</label><input id="nm" autocomplete="name" placeholder="e.g. Ayesha Khan"><div class="row" style="margin-top:1rem"><button class="b" onclick="begin('${e.id}')">Begin exam</button><button class="b g" onclick="nav('exams')">Back</button></div></div>`}
+function begin(id){const nm=$('#nm').value.trim();if(!nm){alert('Enter your name to begin.');return}
+ const e=D.exams.find(x=>x.id===id);S={e,nm,ans:e.qs.map(()=>null),fl:e.qs.map(()=>false),i:0,end:Date.now()+e.mins*60000};view='take';stop();timer=setInterval(tick,1000);render()}
+function tick(){if(!S)return;const left=Math.max(0,Math.round((S.end-Date.now())/1000));const el=$('#tm');if(el){el.textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');el.className=left<60?'low':''}if(left<=0){alert('Time is up. Your exam is being submitted.');submit(true)}}
+function vTake(){const e=S.e,q=e.qs[S.i],a=S.ans[S.i];let body='';
+ if(q.t==='short')body=`<label for="sa">Your answer</label><input id="sa" value="${esc(a||'')}" oninput="S.ans[S.i]=this.value;pal()" autocomplete="off">`;
+ else{const opts=q.t==='tf'?['True','False']:q.o;body=opts.map((o,j)=>`<label class="opt ${a===j?'sel':''}" style="font-weight:400;margin:.5rem 0"><input type="radio" name="o" ${a===j?'checked':''} onchange="pick(${j})"><span>${esc(o)}</span></label>`).join('')}
+ return `<div class="exam"><div class="card"><p class="mute sm">Question ${S.i+1} of ${e.qs.length} · ${q.m} mark${q.m>1?'s':''}</p><h3>${esc(q.q)}</h3>${body}<div class="row" style="margin-top:1.2rem"><button class="b g" onclick="go(-1)" ${S.i===0?'disabled':''}>Previous</button><button class="b g" onclick="flag()">${S.fl[S.i]?'Remove flag':'Flag for review'}</button><button class="b" onclick="go(1)" ${S.i===e.qs.length-1?'disabled':''}>Next</button></div></div>
+ <div><div class="card"><p class="mute sm" style="margin:0">Time left</p><div id="tm">--:--</div></div><div class="card"><p class="sm mute" style="margin-top:0">${esc(S.nm)}</p><div class="pal" id="pal">${palHTML()}</div><button class="b" style="width:100%;margin-top:1rem" onclick="finish()">Submit exam</button></div></div></div>`}
+function palHTML(){return S.e.qs.map((_,i)=>`<button class="${S.ans[i]!==null&&S.ans[i]!==''?'ans':''} ${S.fl[i]?'fl':''} ${i===S.i?'cur':''}" onclick="jump(${i})" aria-label="Question ${i+1}">${i+1}</button>`).join('')}
+function pal(){const p=$('#pal');if(p)p.innerHTML=palHTML()}
+function pick(j){S.ans[S.i]=j;render()}
+function go(d){S.i+=d;render()}function jump(i){S.i=i;render()}
+function flag(){S.fl[S.i]=!S.fl[S.i];render()}
+function finish(){const un=S.ans.filter(a=>a===null||a==='').length,fl=S.fl.filter(Boolean).length;
+ if(confirm((un?un+' question(s) unanswered. ':'')+(fl?fl+' flagged. ':'')+'Submit now?'))submit(false)}
+function mark(q,a){if(a===null||a==='')return false;if(q.t==='short')return String(q.a).split('|').map(x=>x.trim().toLowerCase()).includes(String(a).trim().toLowerCase());return a===q.a}
+function submit(){stop();const e=S.e;let sc=0;e.qs.forEach((q,i)=>{if(mark(q,S.ans[i]))sc+=+q.m||1});const t=total(e),pc=Math.round(sc/t*100);
+ const r={id:'r'+Date.now(),name:S.nm,exam:e.title,score:sc,total:t,pct:pc,pass:pc>=e.pass,at:new Date().toLocaleString(),e:JSON.parse(JSON.stringify(e)),ans:S.ans};
+ D.results.unshift(r);save();S=null;lastRes=r;view='done';render()}
+function vDone(){const r=lastRes;return `<div class="card" style="text-align:center"><p class="mute">${esc(r.name)} · ${esc(r.exam)}</p><div class="score">${r.score}/${r.total}</div><p>${r.pct}% · <span class="${r.pass?'pass':'fail'}">${r.pass?'Passed':'Not passed'}</span></p><button class="b" onclick="nav('exams')">Back to exams</button></div><h2>Answer review</h2>`+review(r)}
+function review(r){return r.e.qs.map((q,i)=>{const a=r.ans[i],ok=mark(q,a);let det;
+ if(q.t==='short')det=`<p>Your answer: <b>${esc(a||'(blank)')}</b></p><p>Accepted: <b>${esc(String(q.a).split('|').join(' / '))}</b></p>`;
+ else{const o=q.t==='tf'?['True','False']:q.o;det=`<p>Your answer: <b>${a===null?'(blank)':esc(o[a])}</b></p><p>Correct: <b>${esc(o[q.a])}</b></p>`}
+ return `<div class="card"><p class="sm ${ok?'pass':'fail'}">${ok?'Correct':'Incorrect'} · ${ok?q.m:0}/${q.m}</p><h3>${i+1}. ${esc(q.q)}</h3>${det}</div>`}).join('')}
+function vResults(){if(!D.results.length)return `<h2>Results</h2><div class="card"><p>No attempts yet. Results appear here after someone submits an exam.</p></div>`;
+ return `<h2>Results</h2><div class="card wrap"><table><tr><th>Student</th><th>Exam</th><th>Score</th><th>Outcome</th><th>Submitted</th><th></th></tr>${D.results.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.exam)}</td><td>${r.score}/${r.total} (${r.pct}%)</td><td class="${r.pass?'pass':'fail'}">${r.pass?'Passed':'Not passed'}</td><td>${esc(r.at)}</td><td><button class="b g" onclick="viewRes('${r.id}')">Review</button></td></tr>`).join('')}</table></div><button class="d" onclick="clearRes()">Clear all results</button>`}
+function viewRes(id){lastRes=D.results.find(r=>r.id===id);view='done';render()}
+function clearRes(){if(confirm('Delete all results?')){D.results=[];save();render()}}
+/* ---------- builder ---------- */
+function newDraft(){draft={id:'e'+Date.now(),title:'',subject:'',mins:30,pass:40,qs:[mkQ('mcq')]}}
+function mkQ(t){return t==='mcq'?{t,q:'',o:['','','',''],a:0,m:1}:t==='tf'?{t,q:'',a:0,m:1}:{t,q:'',a:'',m:1}}
+function vCreate(){const d=draft;return `<h2>Create an exam</h2><div class="card"><label for="t">Exam title</label><input id="t" value="${esc(d.title)}" oninput="draft.title=this.value" placeholder="e.g. Calculus midterm"><label for="s">Subject or course</label><input id="s" value="${esc(d.subject)}" oninput="draft.subject=this.value">
+ <div class="row"><div class="f"><label for="m">Duration (minutes)</label><input id="m" type="number" min="1" value="${d.mins}" oninput="draft.mins=Math.max(1,+this.value||1)"></div><div class="f"><label for="p">Pass mark (%)</label><input id="p" type="number" min="1" max="100" value="${d.pass}" oninput="draft.pass=+this.value||0"></div></div></div>`+
+ d.qs.map((q,i)=>`<div class="card"><div class="row"><h3 style="margin:0;flex:1">Question ${i+1}</h3><button class="d" onclick="rmQ(${i})" ${d.qs.length<2?'disabled':''}>Remove</button></div>
+ <div class="row"><div class="f"><label>Type</label><select onchange="setT(${i},this.value)"><option value="mcq" ${q.t==='mcq'?'selected':''}>Multiple choice</option><option value="tf" ${q.t==='tf'?'selected':''}>True or false</option><option value="short" ${q.t==='short'?'selected':''}>Short answer</option></select></div><div class="f"><label>Marks</label><input type="number" min="1" value="${q.m}" oninput="draft.qs[${i}].m=Math.max(1,+this.value||1)"></div></div>
+ <label>Question</label><textarea rows="2" oninput="draft.qs[${i}].q=this.value">${esc(q.q)}</textarea>`+
+ (q.t==='mcq'?`<label>Options (select the correct one)</label>`+q.o.map((o,j)=>`<div class="row" style="margin:.3rem 0"><input type="radio" name="c${i}" style="width:auto" ${q.a===j?'checked':''} onchange="draft.qs[${i}].a=${j}" aria-label="Correct option ${j+1}"><input style="flex:1;width:auto" value="${esc(o)}" placeholder="Option ${j+1}" oninput="draft.qs[${i}].o[${j}]=this.value"></div>`).join(''):
+ q.t==='tf'?`<label>Correct answer</label><select onchange="draft.qs[${i}].a=+this.value"><option value="0" ${q.a===0?'selected':''}>True</option><option value="1" ${q.a===1?'selected':''}>False</option></select>`:
+ `<label>Accepted answers</label><input value="${esc(q.a)}" oninput="draft.qs[${i}].a=this.value" placeholder="Separate alternatives with |"><p class="mute sm">Matching ignores capital letters and extra spaces.</p>`)+`</div>`).join('')+
+ `<div class="row"><button class="b g" onclick="addQ()">Add question</button><button class="b" onclick="saveExam()">Save exam</button></div>`}
+function addQ(){draft.qs.push(mkQ('mcq'));render();window.scrollTo(0,document.body.scrollHeight)}
+function rmQ(i){draft.qs.splice(i,1);render()}
+function setT(i,t){const m=draft.qs[i];draft.qs[i]=Object.assign(mkQ(t),{q:m.q,m:m.m});render()}
+function saveExam(){const d=draft;if(!d.title.trim()){alert('Add an exam title.');return}
+ for(const [i,q] of d.qs.entries()){if(!q.q.trim()){alert('Question '+(i+1)+' needs text.');return}
+  if(q.t==='mcq'&&q.o.some(o=>!o.trim())){alert('Fill in all four options for question '+(i+1)+'.');return}
+  if(q.t==='short'&&!String(q.a).trim()){alert('Add an accepted answer for question '+(i+1)+'.');return}}
+ D.exams.push(d);save();draft=null;view='exams';render()}
+render();
+</script>
+</body>
+</html>
