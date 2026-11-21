@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ExamDesk – Conduct exams online, from setup to results</title>
+<meta name="description" content="ExamDesk lets schools, universities and training teams build timed exams, run them online and mark them automatically.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#14213f;--mute:#586380;--line:#dde1ec;--acc:#e5530f;--acc-ink:#fff;--navy:#16254a;--navy-ink:#fff;--soft:#e9edf8;--ok:#14794f;--ok-bg:#e1f4ea;--bad:#b3261e;--bad-bg:#fbe8e6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1326;--card:#151d38;--ink:#e8ecf8;--mute:#a0abc8;--line:#2a3558;--acc:#ff8a4c;--acc-ink:#1a0c02;--navy:#0a0f1f;--navy-ink:#e8ecf8;--soft:#1b2646;--ok:#52d39b;--ok-bg:#12332a;--bad:#ff8e86;--bad-bg:#3a1d1c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1326;--card:#151d38;--ink:#e8ecf8;--mute:#a0abc8;--line:#2a3558;--acc:#ff8a4c;--acc-ink:#1a0c02;--navy:#0a0f1f;--navy-ink:#e8ecf8;--soft:#1b2646;--ok:#52d39b;--ok-bg:#12332a;--bad:#ff8e86;--bad-bg:#3a1d1c;color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*{box-sizing:border-box}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Hanken Grotesk",system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.12;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:4px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:64px}
+.logo{font:700 1.35rem Fraunces,Georgia,serif;color:var(--ink);text-decoration:none}
+nav{display:flex;gap:1.2rem;align-items:center}nav a{color:var(--mute);text-decoration:none;font-weight:500;font-size:.95rem}nav a:hover{color:var(--ink)}
+@media(max-width:700px){nav a.l{display:none}}
+.btn{display:inline-block;border:2px solid var(--acc);background:var(--acc);color:var(--acc-ink);padding:.7rem 1.35rem;border-radius:10px;font:700 1rem "Hanken Grotesk",sans-serif;text-decoration:none;cursor:pointer}
+.btn.o{background:none;color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+nav .btn{padding:.45rem 1rem;color:var(--acc-ink)}
+.hero{padding:4rem 0}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr;gap:2rem}.hero{padding:2.5rem 0}}
+h1{font-size:clamp(2.5rem,6vw,4.3rem);letter-spacing:-.02em}
+.lead{font-size:1.2rem;color:var(--mute);max-width:46ch;margin:1.2rem 0 1.8rem}
+.row{display:flex;gap:.7rem;flex-wrap:wrap}
+.trust{margin-top:1.8rem;color:var(--mute);font-size:.95rem}
+/* demo card */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px -24px rgba(20,33,63,.45);overflow:hidden}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.2rem;background:var(--navy);color:var(--navy-ink)}
+.dh b{font-weight:600}.tm{font:700 1.2rem Fraunces,Georgia,serif;font-variant-numeric:tabular-nums}
+.tm.low{color:#ff8e86}
+.db{padding:1.3rem}
+.bar{height:6px;border-radius:9px;background:var(--soft);margin-bottom:1rem;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.q{font:600 1.25rem Fraunces,Georgia,serif;margin:.2rem 0 .8rem}
+.o{display:flex;gap:.7rem;align-items:center;border:1.5px solid var(--line);border-radius:10px;padding:.65rem .9rem;margin:.45rem 0;cursor:pointer;background:var(--bg)}
+.o input{accent-color:var(--acc)}.o.sel{border-color:var(--acc)}
+.o.ok{border-color:var(--ok);background:var(--ok-bg)}.o.bad{border-color:var(--bad);background:var(--bad-bg)}
+.df{display:flex;justify-content:space-between;gap:.5rem;margin-top:1rem}
+.res{text-align:center;padding:.5rem 0}.res .big{font:700 3.2rem Fraunces,Georgia,serif}
+.ok-t{color:var(--ok);font-weight:700}.bad-t{color:var(--bad);font-weight:700}
+/* sections */
+section{padding:4.5rem 0}
+section.alt{background:var(--card);border-block:1px solid var(--line)}
+h2{font-size:clamp(1.9rem,4vw,2.7rem);margin-bottom:.8rem}
+.sub{color:var(--mute);max-width:56ch;margin:0 0 2.2rem}
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.t{padding:1.4rem;border:0 solid var(--line);border-width:0 1px 1px 0;margin:0 -1px -1px 0}
+.t h3{font-size:1.25rem;margin-bottom:.35rem}.t p{margin:0;color:var(--mute);font-size:.98rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;counter-reset:s;padding:0;list-style:none}
+.steps li{counter-increment:s;border-top:3px solid var(--acc);padding-top:1rem}
+.steps li::before{content:counter(s);display:block;font:700 2.4rem Fraunces,Georgia,serif;color:var(--acc);line-height:1}
+.steps h3{font-size:1.25rem;margin:.4rem 0}.steps p{margin:0;color:var(--mute)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+.f{border:1px solid var(--line);border-radius:12px;padding:1.4rem;background:var(--bg)}
+.f h3{font-size:1.2rem;margin-bottom:.4rem}.f p{margin:0;color:var(--mute);font-size:.98rem}
+.soon{display:inline-block;margin-top:.7rem;font-size:.85rem;font-weight:600;color:var(--acc)}
+details{border-bottom:1px solid var(--line);padding:1rem 0}details summary{font-weight:700;cursor:pointer;font-size:1.05rem}details p{color:var(--mute);margin:.6rem 0 0}
+.cta{background:var(--navy);color:var(--navy-ink);text-align:center;padding:4.5rem 0}
+.cta p{color:color-mix(in srgb,var(--navy-ink) 75%,transparent);max-width:48ch;margin:0 auto 1.6rem}
+footer{padding:2rem 0 3rem;color:var(--mute);font-size:.92rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="#top">ExamDesk</a>
+<nav aria-label="Main"><a class="l" href="#exams">Exam types</a><a class="l" href="#how">How it works</a><a class="l" href="#features">Features</a><a class="l" href="#faq">FAQ</a><a class="btn" href="#demo">Try a demo</a></nav></div></header>
+
+<main id="top">
+<div class="hero"><div class="wrap">
+ <div>
+  <h1>Conduct any exam online, fairly and on time.</h1>
+  <p class="lead">Build a timed paper in minutes, let candidates sit it from any device, and get every script marked the moment they submit.</p>
+  <div class="row"><a class="btn" href="#demo">Take the sample exam</a><a class="btn o" href="#how">See how it works</a></div>
+  <p class="trust">Multiple choice, true or false and short answer questions, with an automatic timer and instant results.</p>
+ </div>
+ <div class="demo" id="demo" aria-live="polite">
+  <div class="dh"><b>Sample exam: General knowledge</b><span class="tm" id="tm">02:00</span></div>
+  <div class="db" id="db"></div>
+ </div>
+</div></div>
+
+<section class="alt" id="exams"><div class="wrap">
+ <h2>One platform for every kind of exam</h2>
+ <p class="sub">Whatever you are assessing, the same simple flow applies: set the paper, set the clock, and let the system do the marking.</p>
+ <div class="types">
+  <div class="t"><h3>School tests and quizzes</h3><p>Weekly class tests, unit checks and revision quizzes with instant feedback for students.</p></div>
+  <div class="t"><h3>University midterms and finals</h3><p>Longer timed papers with mixed question types and mark weighting per question.</p></div>
+  <div class="t"><h3>Entrance and admission tests</h3><p>Screen large groups of applicants against a fixed pass mark.</p></div>
+  <div class="t"><h3>Professional certification</h3><p>Check competence with clear pass or fail outcomes and a full answer review.</p></div>
+  <div class="t"><h3>Recruitment assessments</h3><p>Give every candidate the same questions, the same time and the same marking.</p></div>
+  <div class="t"><h3>Practice and mock exams</h3><p>Let learners rehearse under real exam conditions as often as they want.</p></div>
+ </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+ <h2>From blank page to results in four steps</h2>
+ <p class="sub">There is nothing to install. Everything runs in the browser.</p>
+ <ol class="steps">
+  <li><h3>Create the paper</h3><p>Add questions, mark values, duration and a pass mark.</p></li>
+  <li><h3>Share the exam</h3><p>Candidates choose the exam, enter their name and begin.</p></li>
+  <li><h3>Conduct it</h3><p>A countdown runs, answers are tracked and the paper submits itself at zero.</p></li>
+  <li><h3>Review results</h3><p>See scores, outcomes and each answer against the correct one.</p></li>
+ </ol>
+</div></section>
+
+<section class="alt" id="features"><div class="wrap">
+ <h2>Built for the exam room</h2>
+ <p class="sub">Every feature below works today in the ExamDesk exam builder.</p>
+ <div class="feat">
+  <div class="f"><h3>Three question types</h3><p>Multiple choice, true or false and short answer, each with its own marks.</p></div>
+  <div class="f"><h3>Automatic timer</h3><p>A visible countdown warns candidates in the last minute and submits when time ends.</p></div>
+  <div class="f"><h3>Instant marking</h3><p>Scores, percentage and pass or fail appear as soon as the paper is handed in.</p></div>
+  <div class="f"><h3>Question palette</h3><p>Candidates jump between questions, flag the uncertain ones and see what is unanswered.</p></div>
+  <div class="f"><h3>Answer review</h3><p>Each attempt shows the candidate’s answer beside the correct one.</p></div>
+  <div class="f"><h3>Results record</h3><p>Every attempt is stored with name, exam, score and submission time.</p><span class="soon">Next: shared results across devices and teacher logins</span></div>
+ </div>
+</div></section>
+
+<section id="faq"><div class="wrap" style="max-width:760px">
+ <h2>Common questions</h2>
+ <details><summary>How are short answers marked?</summary><p>You list one or more accepted answers. Matching ignores capital letters and extra spaces, so “islamabad” and “Islamabad” both count.</p></details>
+ <details><summary>What happens when the time runs out?</summary><p>The exam submits automatically and the candidate sees their result straight away.</p></details>
+ <details><summary>Can candidates change an answer before submitting?</summary><p>Yes. They can move back and forth between questions until they submit or the timer ends.</p></details>
+ <details><summary>Do I need to install anything?</summary><p>No. ExamDesk runs in any modern browser on a phone, tablet or computer.</p></details>
+</div></section>
+
+<div class="cta"><div class="wrap">
+ <h2>Ready to run your next exam?</h2>
+ <p>Start with the sample paper above, then build your own in a few minutes.</p>
+ <a class="btn" href="https://claude.ai/artifact/CgxznJ38FEbYd79STLTt2G" rel="noopener">Open the exam builder</a>
+</div></div>
+</main>
+<footer><div class="wrap"><span>© <span id="yr"></span> ExamDesk</span><span>Online exam conduct made simple</span></div></footer>
+
+<script>
+const Q=[
+{q:'Which planet is closest to the Sun?',o:['Venus','Mercury','Mars','Earth'],a:1},
+{q:'Water boils at 100 °C at sea level.',o:['True','False'],a:0},
+{q:'What is 7 × 8?',o:['54','56','63','64'],a:1}];
+let i=0,ans=Q.map(()=>null),left=120,t=null,done=false;
+const db=document.getElementById('db'),tm=document.getElementById('tm');
+function fmt(){tm.textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');tm.className='tm'+(left<30?' low':'')}
+function start(){clearInterval(t);i=0;ans=Q.map(()=>null);left=120;done=false;fmt();t=setInterval(()=>{left--;fmt();if(left<=0)finish()},1000);draw()}
+function draw(){const q=Q[i];
+ db.innerHTML=`<div class="bar"><i style="width:${(i+1)/Q.length*100}%"></i></div><p style="margin:0;color:var(--mute);font-size:.9rem">Question ${i+1} of ${Q.length}</p><p class="q">${q.q}</p>`+
+ q.o.map((o,j)=>`<label class="o ${ans[i]===j?'sel':''}"><input type="radio" name="o" ${ans[i]===j?'checked':''} onchange="ans[i]=${j};draw()">${o}</label>`).join('')+
+ `<div class="df"><button class="btn o" onclick="i--;draw()" ${i===0?'disabled':''}>Previous</button>${i<Q.length-1?'<button class="btn" onclick="i++;draw()">Next</button>':'<button class="btn" onclick="finish()">Submit</button>'}</div>`}
+function finish(){clearInterval(t);done=true;const s=Q.filter((q,k)=>ans[k]===q.a).length,p=Math.round(s/Q.length*100);
+ db.innerHTML=`<div class="res"><div class="big">${s}/${Q.length}</div><p>${p}% · <span class="${p>=50?'ok-t':'bad-t'}">${p>=50?'Passed':'Not passed'}</span></p></div>`+
+ Q.map((q,k)=>`<p style="margin:.7rem 0 .2rem;font-weight:600">${k+1}. ${q.q}</p><div class="o ${ans[k]===q.a?'ok':'bad'}" style="cursor:default">Your answer: ${ans[k]===null?'(blank)':q.o[ans[k]]}${ans[k]===q.a?'':' · Correct: '+q.o[q.a]}</div>`).join('')+
+ `<div class="df"><button class="btn o" onclick="start()" style="width:100%">Retake the sample</button></div>`}
+start();
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
