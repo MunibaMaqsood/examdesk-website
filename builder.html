@@ -3,136 +3,139 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ExamDesk – Create and conduct exams</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap">
+<title>ExamDesk – Exam app</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#f2f4f8;--card:#fff;--ink:#101828;--mute:#5b6577;--line:#d9dee8;--acc:#2f5bea;--acc-ink:#fff;--ok:#157a55;--bad:#b83227;--warn:#b26a00;--ok-bg:#e3f5ec;--bad-bg:#fbe9e7;
+:root{--bg:#f6f7fb;--card:#fff;--ink:#14213f;--mute:#586380;--line:#dde1ec;--acc:#e5530f;--acc-ink:#fff;--navy:#16254a;--ok:#14794f;--ok-bg:#e1f4ea;--bad:#b3261e;--bad-bg:#fbe8e6;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1420;--card:#161e2e;--ink:#e8ecf4;--mute:#9aa5b8;--line:#2a3550;--acc:#6f93ff;--acc-ink:#0e1420;--ok:#4fcf9a;--bad:#ff8f84;--warn:#f0b24a;--ok-bg:#12302a;--bad-bg:#3a1c1b;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0e1420;--card:#161e2e;--ink:#e8ecf4;--mute:#9aa5b8;--line:#2a3550;--acc:#6f93ff;--acc-ink:#0e1420;--ok:#4fcf9a;--bad:#ff8f84;--warn:#f0b24a;--ok-bg:#12302a;--bad-bg:#3a1c1b;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif}
-h1,h2,h3{font-family:Bitter,Georgia,serif;line-height:1.2;margin:0 0 .5rem}
-h1{font-size:2rem}h2{font-size:1.4rem}h3{font-size:1.1rem}
-header.top{background:var(--card);border-bottom:1px solid var(--line)}
-.bar{max-width:980px;margin:0 auto;padding:.8rem 1rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.brand{font:700 1.3rem Bitter,Georgia,serif}
-nav{display:flex;gap:.25rem}
-nav button{background:none;border:0;color:var(--mute);font:500 .95rem inherit;font-family:inherit;padding:.5rem .8rem;border-radius:8px;cursor:pointer}
-nav button.on{background:var(--acc);color:var(--acc-ink)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1326;--card:#151d38;--ink:#e8ecf8;--mute:#a0abc8;--line:#2a3558;--acc:#ff8a4c;--acc-ink:#1a0c02;--navy:#0a0f1f;--ok:#52d39b;--ok-bg:#12332a;--bad:#ff8e86;--bad-bg:#3a1d1c;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Hanken Grotesk",system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0 0 .5rem}
+header{background:var(--navy);color:#fff}.bar{max-width:980px;margin:0 auto;padding:.7rem 1rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{font:700 1.3rem Fraunces,Georgia,serif;color:#fff;text-decoration:none}
+nav{display:flex;gap:.3rem;flex-wrap:wrap}nav button{background:none;border:0;color:#dfe5f7;font:600 .92rem inherit;font-family:inherit;padding:.45rem .8rem;border-radius:8px;cursor:pointer}nav button.on{background:var(--acc);color:var(--acc-ink)}
 main{max-width:980px;margin:0 auto;padding:1.5rem 1rem 3rem}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.2rem;margin-bottom:1rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
 .mute{color:var(--mute)}.sm{font-size:.88rem}
-button.b,a.b{background:var(--acc);color:var(--acc-ink);border:1px solid var(--acc);border-radius:8px;padding:.55rem 1rem;font:600 .95rem "Public Sans",sans-serif;cursor:pointer}
-button.g{background:none;color:var(--ink);border-color:var(--line)}
-button.d{background:none;color:var(--bad);border-color:var(--line)}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-button:disabled{opacity:.45;cursor:not-allowed}
+.b{background:var(--acc);color:var(--acc-ink);border:1px solid var(--acc);border-radius:8px;padding:.55rem 1rem;font:700 .95rem "Hanken Grotesk",sans-serif;cursor:pointer}
+.g{background:none;color:var(--ink);border-color:var(--line)}.d{background:none;color:var(--bad);border:1px solid var(--line);border-radius:8px;padding:.5rem .9rem;font:600 .9rem inherit;font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}
 input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.55rem .7rem}
 label{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
-.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
-.row>.f{flex:1;min-width:140px}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}.row>.f{flex:1;min-width:140px}
 .pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:.1rem .65rem;font-size:.82rem;color:var(--mute);margin-right:.3rem}
-.opt{display:flex;gap:.7rem;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0;cursor:pointer;background:var(--bg)}
-.opt input{width:auto;margin-top:.3rem}
-.opt.sel{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
-.opt.ok{border-color:var(--ok);background:var(--ok-bg)}.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
-.exam{display:grid;grid-template-columns:1fr 230px;gap:1rem}
-@media(max-width:720px){.exam{grid-template-columns:1fr}h1{font-size:1.6rem}}
-.pal{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
-.pal button{padding:.4rem 0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer;font-weight:600}
-.pal button.ans{background:var(--ok-bg);border-color:var(--ok)}.pal button.fl{border-color:var(--warn);box-shadow:inset 0 -3px 0 var(--warn)}.pal button.cur{outline:2px solid var(--acc)}
-#tm{font:700 1.6rem Bitter,Georgia,serif;font-variant-numeric:tabular-nums}#tm.low{color:var(--bad)}
-.score{font:700 3.2rem Bitter,Georgia,serif}
-table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.55rem .5rem;border-bottom:1px solid var(--line);font-size:.92rem}
-.wrap{overflow-x:auto}
-.pass{color:var(--ok);font-weight:600}.fail{color:var(--bad);font-weight:600}
-.hero{padding:1.5rem 0 1rem}.hero p{max-width:60ch;font-size:1.08rem}
+.opt{display:flex;gap:.7rem;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0;cursor:pointer;background:var(--bg);font-weight:400}
+.opt input{width:auto;margin-top:.3rem}.opt.sel{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}.opt.ok{border-color:var(--ok);background:var(--ok-bg)}.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.exam{display:grid;grid-template-columns:1fr 230px;gap:1rem}@media(max-width:720px){.exam{grid-template-columns:1fr}}
+.pal{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}.pal button{padding:.4rem 0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer;font-weight:700}
+.pal button.ans{background:var(--ok-bg);border-color:var(--ok)}.pal button.fl{box-shadow:inset 0 -3px 0 var(--acc)}.pal button.cur{outline:2px solid var(--navy)}
+#tm{font:700 1.6rem Fraunces,Georgia,serif;font-variant-numeric:tabular-nums}#tm.low{color:var(--bad)}
+.score{font:700 3.2rem Fraunces,Georgia,serif}.ok-t{color:var(--ok);font-weight:700}.bad-t{color:var(--bad);font-weight:700}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.55rem .5rem;border-bottom:1px solid var(--line);font-size:.92rem}.wrap{overflow-x:auto}
+#msg{margin:.8rem 0 0;font-weight:600}#msg.err{color:var(--bad)}#msg.ok{color:var(--ok)}
 </style>
 </head>
 <body>
-<header class="top"><div class="bar"><div class="brand">ExamDesk</div><nav id="nav"></nav></div></header>
-<main id="app"></main>
+<header><div class="bar"><a class="brand" href="index.html">ExamDesk</a><nav id="nav"></nav></div></header>
+<main id="app"><div class="card">Loading…</div></main>
 <script>
-const K='examdesk.v1';let mem=null;
-const seed={id:'s1',title:'General knowledge sampler',subject:'Sample exam',mins:5,pass:50,qs:[
-{t:'mcq',q:'Which planet is closest to the Sun?',o:['Venus','Mercury','Mars','Earth'],a:1,m:1},
-{t:'tf',q:'Water boils at 100 °C at sea level.',a:0,m:1},
-{t:'short',q:'What is the capital of Pakistan?',a:'Islamabad',m:2},
-{t:'mcq',q:'What is the value of 7 × 8?',o:['54','56','63','64'],a:1,m:1}]};
-function load(){try{const r=localStorage.getItem(K);if(r)return JSON.parse(r)}catch(e){}return mem}
-let D=load()||{exams:[seed],results:[]};
-function save(){mem=D;try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}}
+/* STEP 1: paste your own Supabase details here (Project Settings > API). */
+const SUPABASE_URL='PASTE_YOUR_SUPABASE_URL';
+const SUPABASE_KEY='PASTE_YOUR_ANON_KEY';
+
+const ready=!SUPABASE_URL.startsWith('PASTE');
+const sb=ready?supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let view='exams',draft=null,S=null,timer=null,lastRes=null;
-function nav(v){if(S&&!confirm('Leave the exam? Your answers will be lost.'))return;stop();S=null;view=v;if(v==='create'&&!draft)newDraft();render()}
-function stop(){if(timer){clearInterval(timer);timer=null}}
-function render(){
- $('#nav').innerHTML=S?'':[['exams','Exams'],['create','Create exam'],['results','Results']].map(([k,l])=>`<button class="${view===k?'on':''}" onclick="nav('${k}')">${l}</button>`).join('');
- const f={exams:vExams,create:vCreate,results:vResults,take:vTake,done:vDone,start:vStart}[view];$('#app').innerHTML=f();if(view==='take')tick();window.scrollTo(0,0)}
-function total(e){return e.qs.reduce((s,q)=>s+(+q.m||1),0)}
-const READY=[{"id": "ready-ml", "title": "Machine Learning Fundamentals", "subject": "Machine Learning", "mins": 25, "pass": 50, "qs": [{"t": "mcq", "q": "Which type of learning uses labelled data?", "o": ["Supervised learning", "Unsupervised learning", "Clustering", "Dimensionality reduction"], "a": 0, "m": 1}, {"t": "mcq", "q": "Predicting the price of a house is an example of:", "o": ["Regression", "Classification", "Clustering", "Association"], "a": 0, "m": 1}, {"t": "mcq", "q": "Deciding whether an email is spam or not spam is an example of:", "o": ["Regression", "Classification", "Clustering", "Compression"], "a": 1, "m": 1}, {"t": "mcq", "q": "K-means is an example of:", "o": ["Supervised learning", "Reinforcement learning", "Unsupervised learning", "Regression"], "a": 2, "m": 1}, {"t": "mcq", "q": "A Random Forest is made by combining many:", "o": ["Decision trees", "Linear regressions", "Neural networks", "Clusters"], "a": 0, "m": 1}, {"t": "mcq", "q": "Gini impurity measures:", "o": ["Training speed", "How mixed the classes are in a node", "The number of trees", "The learning rate"], "a": 1, "m": 1}, {"t": "mcq", "q": "Overfitting means the model:", "o": ["Performs poorly on training data", "Performs well on training data but poorly on new data", "Trains too quickly", "Uses too few features"], "a": 1, "m": 1}, {"t": "mcq", "q": "The purpose of a test set is to:", "o": ["Train the model", "Choose the features", "Evaluate the model on unseen data", "Increase the data size"], "a": 2, "m": 1}, {"t": "mcq", "q": "Which metric is used for regression?", "o": ["Accuracy", "Precision", "Recall", "Mean Squared Error"], "a": 3, "m": 1}, {"t": "mcq", "q": "The share of predicted positives that are truly positive is called:", "o": ["Recall", "Accuracy", "Precision", "Mean Squared Error"], "a": 2, "m": 1}, {"t": "mcq", "q": "In RAG, the system:", "o": ["Only memorises its training data", "Retrieves relevant documents, then generates an answer", "Deletes old documents", "Trains a new model for each question"], "a": 1, "m": 1}, {"t": "tf", "q": "A decision tree can be used for both classification and regression.", "a": 0, "m": 1}, {"t": "tf", "q": "A Gini impurity of 0 means a node is perfectly pure.", "a": 0, "m": 1}, {"t": "tf", "q": "Adding more trees to a Random Forest always causes overfitting.", "a": 1, "m": 1}, {"t": "tf", "q": "Unsupervised learning needs labelled data.", "a": 1, "m": 1}, {"t": "short", "q": "What is the problem called when a model learns the noise in the training data?", "a": "Overfitting|overfit", "m": 2}, {"t": "short", "q": "Which method trains each tree on a random sample drawn with replacement?", "a": "Bagging|Bootstrap|Bootstrap aggregating", "m": 2}, {"t": "short", "q": "Which Python library provides RandomForestRegressor?", "a": "scikit-learn|sklearn|scikit learn", "m": 2}, {"t": "short", "q": "In RAG, what are text chunks converted into so they can be searched by meaning?", "a": "Embeddings|Embedding|Vectors", "m": 2}]}];
-function readyHTML(){return `<div class="card"><h3>Ready-made exams</h3><p class="mute sm">Add a finished exam in one click. No typing needed.</p>`+READY.map((r,i)=>`<div class="row" style="margin:.5rem 0"><div style="flex:1"><b>${esc(r.title)}</b><br><span class="mute sm">${r.qs.length} questions, ${r.mins} min</span></div><button class="b" onclick="addReady(${i})" ${D.exams.some(e=>e.rid===r.id)?'disabled':''}>${D.exams.some(e=>e.rid===r.id)?'Added':'Add to my exams'}</button></div>`).join('')+`<hr style="border:0;border-top:1px solid var(--line);margin:1rem 0"><label for="imp">Or import an exam file (.json)</label><input id="imp" type="file" accept=".json,application/json" onchange="importFile(this)"></div>`}
-function addReady(i){const r=JSON.parse(JSON.stringify(READY[i]));r.rid=r.id;r.id='e'+Date.now();D.exams.push(r);save();render()}
-function importFile(el){const f=el.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{let j=JSON.parse(rd.result);j=Array.isArray(j)?j:[j];j.forEach((x,k)=>{if(!x.title||!Array.isArray(x.qs)||!x.qs.length)throw 0;x.id='e'+Date.now()+k;D.exams.push(x)});save();render()}catch(e){alert('This file is not a valid exam file.')}};rd.readAsText(f)}
-function vExams(){
- const list=D.exams.map(e=>`<div class="card"><h3>${esc(e.title)}</h3><p class="mute sm">${esc(e.subject||'')}</p><p><span class="pill">${e.qs.length} questions</span><span class="pill">${e.mins} min</span><span class="pill">Pass ${e.pass}%</span></p><div class="row"><button class="b" onclick="openStart('${e.id}')">Start exam</button><button class="d" onclick="delExam('${e.id}')">Delete</button></div></div>`).join('');
- return `<div class="hero"><h1>Run any exam, from one page.</h1><p>Build quizzes with multiple choice, true or false, and short answer questions. Students take them against a timer and see their marks straight away.</p></div>`+readyHTML()+(list?`<div class="grid">${list}</div>`:`<div class="card"><p>No exams yet.</p><button class="b" onclick="nav('create')">Create your first exam</button></div>`)}
-function delExam(id){if(confirm('Delete this exam?')){D.exams=D.exams.filter(e=>e.id!==id);save();render()}}
-function openStart(id){view='start';S=null;lastRes=id;render()}
-function vStart(){const e=D.exams.find(x=>x.id===lastRes);return `<div class="card" style="max-width:520px"><h2>${esc(e.title)}</h2><p class="mute">${e.qs.length} questions, ${total(e)} marks, ${e.mins} minutes. The exam submits itself when time runs out.</p><label for="nm">Your full name</label><input id="nm" autocomplete="name" placeholder="e.g. Ayesha Khan"><div class="row" style="margin-top:1rem"><button class="b" onclick="begin('${e.id}')">Begin exam</button><button class="b g" onclick="nav('exams')">Back</button></div></div>`}
-function begin(id){const nm=$('#nm').value.trim();if(!nm){alert('Enter your name to begin.');return}
- const e=D.exams.find(x=>x.id===id);S={e,nm,ans:e.qs.map(()=>null),fl:e.qs.map(()=>false),i:0,end:Date.now()+e.mins*60000};view='take';stop();timer=setInterval(tick,1000);render()}
-function tick(){if(!S)return;const left=Math.max(0,Math.round((S.end-Date.now())/1000));const el=$('#tm');if(el){el.textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');el.className=left<60?'low':''}if(left<=0){alert('Time is up. Your exam is being submitted.');submit(true)}}
-function vTake(){const e=S.e,q=e.qs[S.i],a=S.ans[S.i];let body='';
- if(q.t==='short')body=`<label for="sa">Your answer</label><input id="sa" value="${esc(a||'')}" oninput="S.ans[S.i]=this.value;pal()" autocomplete="off">`;
- else{const opts=q.t==='tf'?['True','False']:q.o;body=opts.map((o,j)=>`<label class="opt ${a===j?'sel':''}" style="font-weight:400;margin:.5rem 0"><input type="radio" name="o" ${a===j?'checked':''} onchange="pick(${j})"><span>${esc(o)}</span></label>`).join('')}
- return `<div class="exam"><div class="card"><p class="mute sm">Question ${S.i+1} of ${e.qs.length} · ${q.m} mark${q.m>1?'s':''}</p><h3>${esc(q.q)}</h3>${body}<div class="row" style="margin-top:1.2rem"><button class="b g" onclick="go(-1)" ${S.i===0?'disabled':''}>Previous</button><button class="b g" onclick="flag()">${S.fl[S.i]?'Remove flag':'Flag for review'}</button><button class="b" onclick="go(1)" ${S.i===e.qs.length-1?'disabled':''}>Next</button></div></div>
- <div><div class="card"><p class="mute sm" style="margin:0">Time left</p><div id="tm">--:--</div></div><div class="card"><p class="sm mute" style="margin-top:0">${esc(S.nm)}</p><div class="pal" id="pal">${palHTML()}</div><button class="b" style="width:100%;margin-top:1rem" onclick="finish()">Submit exam</button></div></div></div>`}
-function palHTML(){return S.e.qs.map((_,i)=>`<button class="${S.ans[i]!==null&&S.ans[i]!==''?'ans':''} ${S.fl[i]?'fl':''} ${i===S.i?'cur':''}" onclick="jump(${i})" aria-label="Question ${i+1}">${i+1}</button>`).join('')}
-function pal(){const p=$('#pal');if(p)p.innerHTML=palHTML()}
-function pick(j){S.ans[S.i]=j;render()}
-function go(d){S.i+=d;render()}function jump(i){S.i=i;render()}
-function flag(){S.fl[S.i]=!S.fl[S.i];render()}
-function finish(){const un=S.ans.filter(a=>a===null||a==='').length,fl=S.fl.filter(Boolean).length;
- if(confirm((un?un+' question(s) unanswered. ':'')+(fl?fl+' flagged. ':'')+'Submit now?'))submit(false)}
-function mark(q,a){if(a===null||a==='')return false;if(q.t==='short')return String(q.a).split('|').map(x=>x.trim().toLowerCase()).includes(String(a).trim().toLowerCase());return a===q.a}
-function submit(){stop();const e=S.e;let sc=0;e.qs.forEach((q,i)=>{if(mark(q,S.ans[i]))sc+=+q.m||1});const t=total(e),pc=Math.round(sc/t*100);
- const r={id:'r'+Date.now(),name:S.nm,exam:e.title,score:sc,total:t,pct:pc,pass:pc>=e.pass,at:new Date().toLocaleString(),e:JSON.parse(JSON.stringify(e)),ans:S.ans};
- D.results.unshift(r);save();S=null;lastRes=r;view='done';render()}
-function vDone(){const r=lastRes;return `<div class="card" style="text-align:center"><p class="mute">${esc(r.name)} · ${esc(r.exam)}</p><div class="score">${r.score}/${r.total}</div><p>${r.pct}% · <span class="${r.pass?'pass':'fail'}">${r.pass?'Passed':'Not passed'}</span></p><button class="b" onclick="nav('exams')">Back to exams</button></div><h2>Answer review</h2>`+review(r)}
-function review(r){return r.e.qs.map((q,i)=>{const a=r.ans[i],ok=mark(q,a);let det;
- if(q.t==='short')det=`<p>Your answer: <b>${esc(a||'(blank)')}</b></p><p>Accepted: <b>${esc(String(q.a).split('|').join(' / '))}</b></p>`;
- else{const o=q.t==='tf'?['True','False']:q.o;det=`<p>Your answer: <b>${a===null?'(blank)':esc(o[a])}</b></p><p>Correct: <b>${esc(o[q.a])}</b></p>`}
- return `<div class="card"><p class="sm ${ok?'pass':'fail'}">${ok?'Correct':'Incorrect'} · ${ok?q.m:0}/${q.m}</p><h3>${i+1}. ${esc(q.q)}</h3>${det}</div>`}).join('')}
-function vResults(){if(!D.results.length)return `<h2>Results</h2><div class="card"><p>No attempts yet. Results appear here after someone submits an exam.</p></div>`;
- return `<h2>Results</h2><div class="card wrap"><table><tr><th>Student</th><th>Exam</th><th>Score</th><th>Outcome</th><th>Submitted</th><th></th></tr>${D.results.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.exam)}</td><td>${r.score}/${r.total} (${r.pct}%)</td><td class="${r.pass?'pass':'fail'}">${r.pass?'Passed':'Not passed'}</td><td>${esc(r.at)}</td><td><button class="b g" onclick="viewRes('${r.id}')">Review</button></td></tr>`).join('')}</table></div><button class="d" onclick="clearRes()">Clear all results</button>`}
-function viewRes(id){lastRes=D.results.find(r=>r.id===id);view='done';render()}
-function clearRes(){if(confirm('Delete all results?')){D.results=[];save();render()}}
-/* ---------- builder ---------- */
-function newDraft(){draft={id:'e'+Date.now(),title:'',subject:'',mins:30,pass:40,qs:[mkQ('mcq')]}}
-function mkQ(t){return t==='mcq'?{t,q:'',o:['','','',''],a:0,m:1}:t==='tf'?{t,q:'',a:0,m:1}:{t,q:'',a:'',m:1}}
-function vCreate(){const d=draft;return `<h2>Create an exam</h2><div class="card"><label for="t">Exam title</label><input id="t" value="${esc(d.title)}" oninput="draft.title=this.value" placeholder="e.g. Calculus midterm"><label for="s">Subject or course</label><input id="s" value="${esc(d.subject)}" oninput="draft.subject=this.value">
+let P=null,view='auth',mode='in',S=null,R=null,draft=null,timer=null;
+const stop=()=>{if(timer){clearInterval(timer);timer=null}};
+const msg=(t,k)=>{const m=$('#msg');if(m){m.textContent=t;m.className=k||'err'}};
+
+async function init(){
+ if(!ready){$('#app').innerHTML='<div class="card"><h2>Setup needed</h2><p>Open <b>builder.html</b> and paste your Supabase project URL and anon key at the top of the script.</p></div>';return}
+ const {data}=await sb.auth.getSession();data.session?await enter():render()}
+async function enter(){const {data:{user}}=await sb.auth.getUser();
+ const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).single();
+ if(error){await sb.auth.signOut();return render()}P=data;view='exams';render()}
+async function logout(){stop();S=null;await sb.auth.signOut();P=null;view='auth';mode='in';render()}
+function go(v){if(S&&!confirm('Leave the exam? Your answers will be lost.'))return;stop();S=null;if(v==='create'&&!draft)newDraft();view=v;render()}
+function nav(){$('#nav').innerHTML=!P||S?'':[['exams','Exams'],...(P.role==='teacher'?[['create','Create exam']]:[]),['results',P.role==='teacher'?'Results':'My results']].map(([k,l])=>`<button class="${view===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('')+`<button onclick="logout()">Sign out (${esc(P.name)})</button>`}
+async function render(){nav();let h;try{h=await({auth:vAuth,exams:vExams,create:vCreate,results:vResults,take:vTake,done:vDone}[view])()}catch(e){h='<div class="card">Something went wrong: '+esc(e.message||e)+'</div>'}
+ $('#app').innerHTML=h;if(view==='take')tick();window.scrollTo(0,0)}
+
+/* ---------- sign in / sign up ---------- */
+function vAuth(){const up=mode==='up';return `<div class="card" style="max-width:460px;margin:1rem auto"><h2>${up?'Create your account':'Sign in'}</h2>
+ ${up?'<label for="nm">Full name</label><input id="nm" autocomplete="name">':''}<label for="em">Email</label><input id="em" type="email" autocomplete="email"><label for="pw">Password (at least 6 characters)</label><input id="pw" type="password" autocomplete="${up?'new-password':'current-password'}">
+ ${up?'<label for="tc">Teacher code (leave empty if you are a student)</label><input id="tc" autocomplete="off">':''}
+ <div class="row" style="margin-top:1rem"><button class="b" onclick="doAuth()">${up?'Sign up':'Sign in'}</button><button class="b g" onclick="mode='${up?'in':'up'}';render()">${up?'I have an account':'Create an account'}</button></div><p id="msg"></p></div>`}
+async function doAuth(){const email=$('#em').value.trim(),password=$('#pw').value;
+ if(mode==='up'){const name=$('#nm').value.trim();if(!name)return msg('Enter your name.');
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{name,teacher_code:$('#tc').value.trim()}}});
+  if(error)return msg(error.message);if(data.session)return enter();mode='in';await render();return msg('Account created. Check your email if asked to confirm, then sign in.','ok')}
+ const {error}=await sb.auth.signInWithPassword({email,password});if(error)return msg(error.message);enter()}
+
+/* ---------- exam list ---------- */
+async function vExams(){const T=P.role==='teacher';
+ let q=sb.from('exams').select('*').order('created_at',{ascending:false});if(T)q=q.eq('teacher_id',P.id);
+ const [{data:ex,error},{data:at}]=await Promise.all([q,sb.from('attempts').select('exam_id').eq('student_id',P.id)]);if(error)throw error;
+ const done=new Set((at||[]).map(a=>a.exam_id));
+ const cards=(ex||[]).map(e=>`<div class="card"><h3>${esc(e.title)}</h3><p class="mute sm">${esc(e.subject||'')}</p><p><span class="pill">${e.mins} min</span><span class="pill">Pass ${e.pass}%</span></p><div class="row">${T?`<button class="d" onclick="delExam('${e.id}')">Delete</button>`:done.has(e.id)?'<span class="pill">Submitted</span>':`<button class="b" onclick="start('${e.id}')">Start exam</button>`}</div></div>`).join('');
+ return `<h2>${T?'Your exams':'Available exams'}</h2>`+(T?`<div class="card"><b>Ready-made exam</b><p class="mute sm">Add the Machine Learning exam (19 questions) in one click.</p><button class="b" onclick="addML()">Add ML exam</button></div>`:'')+(cards?`<div class="grid">${cards}</div>`:'<div class="card">No exams yet.</div>')}
+async function delExam(id){if(!confirm('Delete this exam and all its results?'))return;const {error}=await sb.from('exams').delete().eq('id',id);if(error)alert(error.message);render()}
+
+/* ---------- taking an exam ---------- */
+async function start(id){const {data,error}=await sb.rpc('get_exam',{p_exam:id});if(error||!data)return alert(error?error.message:'Exam not found.');
+ S={e:data,ans:{},fl:{},i:0,end:Date.now()+data.mins*60000};view='take';stop();timer=setInterval(tick,1000);render()}
+function tick(){if(!S)return;const l=Math.max(0,Math.round((S.end-Date.now())/1000)),el=$('#tm');if(el){el.textContent=String(Math.floor(l/60)).padStart(2,'0')+':'+String(l%60).padStart(2,'0');el.className=l<60?'low':''}if(l<=0){alert('Time is up. Your exam is being submitted.');submit()}}
+const optsOf=q=>q.type==='tf'?['True','False']:q.options;
+function vTake(){const e=S.e,q=e.questions[S.i],a=S.ans[q.id];let body;
+ if(q.type==='short')body=`<label for="sa">Your answer</label><input id="sa" value="${esc(a||'')}" oninput="S.ans['${q.id}']=this.value;pal()" autocomplete="off">`;
+ else body=optsOf(q).map((o,j)=>`<label class="opt ${a===String(j)?'sel':''}"><input type="radio" name="o" ${a===String(j)?'checked':''} onchange="pick(${j})"><span>${esc(o)}</span></label>`).join('');
+ return `<div class="exam"><div class="card"><p class="mute sm">${esc(e.title)} · Question ${S.i+1} of ${e.questions.length} · ${q.marks} mark${q.marks>1?'s':''}</p><h3>${esc(q.q)}</h3>${body}<div class="row" style="margin-top:1.2rem"><button class="b g" onclick="mv(-1)" ${S.i===0?'disabled':''}>Previous</button><button class="b g" onclick="flag()">${S.fl[q.id]?'Remove flag':'Flag for review'}</button><button class="b" onclick="mv(1)" ${S.i===e.questions.length-1?'disabled':''}>Next</button></div></div>
+ <div><div class="card"><p class="mute sm" style="margin:0">Time left</p><div id="tm">--:--</div></div><div class="card"><div class="pal" id="pal">${palH()}</div><button class="b" style="width:100%;margin-top:1rem" onclick="finish()">Submit exam</button></div></div></div>`}
+function palH(){return S.e.questions.map((q,i)=>`<button class="${S.ans[q.id]?'ans':''} ${S.fl[q.id]?'fl':''} ${i===S.i?'cur':''}" onclick="S.i=${i};render()" aria-label="Question ${i+1}">${i+1}</button>`).join('')}
+function pal(){const p=$('#pal');if(p)p.innerHTML=palH()}
+function pick(j){S.ans[S.e.questions[S.i].id]=String(j);render()}
+function mv(d){S.i+=d;render()}
+function flag(){const id=S.e.questions[S.i].id;S.fl[id]=!S.fl[id];render()}
+function finish(){const un=S.e.questions.filter(q=>!S.ans[q.id]).length;if(confirm((un?un+' question(s) unanswered. ':'')+'Submit now?'))submit()}
+async function submit(){stop();const s=S;S=null;const {data,error}=await sb.rpc('submit_attempt',{p_exam:s.e.id,p_answers:s.ans});
+ if(error){alert(/duplicate|unique/i.test(error.message)?'You have already submitted this exam.':error.message);view='exams';return render()}R={d:data,title:s.e.title};view='done';render()}
+function vDone(){const d=R.d;return `<div class="card" style="text-align:center"><p class="mute">${esc(R.title)}</p><div class="score">${d.score}/${d.total}</div><p>${d.pct}% · <span class="${d.passed?'ok-t':'bad-t'}">${d.passed?'Passed':'Not passed'}</span></p><button class="b" onclick="go('exams')">Back to exams</button></div><h2>Answer review</h2>`+
+ d.review.map((r,i)=>{let y=r.yours||'(blank)',c=r.correct;if(r.type!=='short'){const o=r.type==='tf'?['True','False']:r.options;y=r.yours===''?'(blank)':o[+r.yours];c=o[+r.correct]}else c=r.correct.split('|').join(' / ');
+ return `<div class="card"><p class="sm ${r.ok?'ok-t':'bad-t'}">${r.ok?'Correct':'Incorrect'} · ${r.ok?r.marks:0}/${r.marks}</p><h3>${i+1}. ${esc(r.q)}</h3><p>Your answer: <b>${esc(y)}</b></p><p>Correct: <b>${esc(c)}</b></p></div>`}).join('')}
+
+/* ---------- results ---------- */
+async function vResults(){const T=P.role==='teacher';
+ let q=sb.from('attempts').select('score,total,pct,passed,submitted_at,exams(title),profiles(name)').order('submitted_at',{ascending:false});if(!T)q=q.eq('student_id',P.id);
+ const {data,error}=await q;if(error)throw error;if(!data.length)return '<h2>Results</h2><div class="card">No results yet.</div>';
+ return `<h2>${T?'Student results':'My results'}</h2><div class="card wrap"><table><tr>${T?'<th>Student</th>':''}<th>Exam</th><th>Score</th><th>Outcome</th><th>Submitted</th></tr>${data.map(r=>`<tr>${T?`<td>${esc(r.profiles&&r.profiles.name)}</td>`:''}<td>${esc(r.exams&&r.exams.title)}</td><td>${r.score}/${r.total} (${r.pct}%)</td><td class="${r.passed?'ok-t':'bad-t'}">${r.passed?'Passed':'Not passed'}</td><td>${new Date(r.submitted_at).toLocaleString()}</td></tr>`).join('')}</table></div>`}
+
+/* ---------- create exam (teachers) ---------- */
+const mk=t=>t==='mcq'?{t,q:'',o:['','','',''],a:0,m:1}:t==='tf'?{t,q:'',a:0,m:1}:{t,q:'',a:'',m:1};
+function newDraft(){draft={title:'',subject:'',mins:30,pass:40,qs:[mk('mcq')]}}
+function vCreate(){const d=draft;return `<h2>Create an exam</h2><div class="card"><label for="t">Exam title</label><input id="t" value="${esc(d.title)}" oninput="draft.title=this.value"><label for="s">Subject</label><input id="s" value="${esc(d.subject)}" oninput="draft.subject=this.value">
  <div class="row"><div class="f"><label for="m">Duration (minutes)</label><input id="m" type="number" min="1" value="${d.mins}" oninput="draft.mins=Math.max(1,+this.value||1)"></div><div class="f"><label for="p">Pass mark (%)</label><input id="p" type="number" min="1" max="100" value="${d.pass}" oninput="draft.pass=+this.value||0"></div></div></div>`+
- d.qs.map((q,i)=>`<div class="card"><div class="row"><h3 style="margin:0;flex:1">Question ${i+1}</h3><button class="d" onclick="rmQ(${i})" ${d.qs.length<2?'disabled':''}>Remove</button></div>
+ d.qs.map((q,i)=>`<div class="card"><div class="row"><h3 style="margin:0;flex:1">Question ${i+1}</h3><button class="d" onclick="draft.qs.splice(${i},1);render()" ${d.qs.length<2?'disabled':''}>Remove</button></div>
  <div class="row"><div class="f"><label>Type</label><select onchange="setT(${i},this.value)"><option value="mcq" ${q.t==='mcq'?'selected':''}>Multiple choice</option><option value="tf" ${q.t==='tf'?'selected':''}>True or false</option><option value="short" ${q.t==='short'?'selected':''}>Short answer</option></select></div><div class="f"><label>Marks</label><input type="number" min="1" value="${q.m}" oninput="draft.qs[${i}].m=Math.max(1,+this.value||1)"></div></div>
  <label>Question</label><textarea rows="2" oninput="draft.qs[${i}].q=this.value">${esc(q.q)}</textarea>`+
- (q.t==='mcq'?`<label>Options (select the correct one)</label>`+q.o.map((o,j)=>`<div class="row" style="margin:.3rem 0"><input type="radio" name="c${i}" style="width:auto" ${q.a===j?'checked':''} onchange="draft.qs[${i}].a=${j}" aria-label="Correct option ${j+1}"><input style="flex:1;width:auto" value="${esc(o)}" placeholder="Option ${j+1}" oninput="draft.qs[${i}].o[${j}]=this.value"></div>`).join(''):
+ (q.t==='mcq'?'<label>Options (select the correct one)</label>'+q.o.map((o,j)=>`<div class="row" style="margin:.3rem 0"><input type="radio" name="c${i}" style="width:auto" ${q.a===j?'checked':''} onchange="draft.qs[${i}].a=${j}" aria-label="Correct option ${j+1}"><input style="flex:1;width:auto" value="${esc(o)}" placeholder="Option ${j+1}" oninput="draft.qs[${i}].o[${j}]=this.value"></div>`).join(''):
  q.t==='tf'?`<label>Correct answer</label><select onchange="draft.qs[${i}].a=+this.value"><option value="0" ${q.a===0?'selected':''}>True</option><option value="1" ${q.a===1?'selected':''}>False</option></select>`:
- `<label>Accepted answers</label><input value="${esc(q.a)}" oninput="draft.qs[${i}].a=this.value" placeholder="Separate alternatives with |"><p class="mute sm">Matching ignores capital letters and extra spaces.</p>`)+`</div>`).join('')+
- `<div class="row"><button class="b g" onclick="addQ()">Add question</button><button class="b" onclick="saveExam()">Save exam</button></div>`}
-function addQ(){draft.qs.push(mkQ('mcq'));render();window.scrollTo(0,document.body.scrollHeight)}
-function rmQ(i){draft.qs.splice(i,1);render()}
-function setT(i,t){const m=draft.qs[i];draft.qs[i]=Object.assign(mkQ(t),{q:m.q,m:m.m});render()}
-function saveExam(){const d=draft;if(!d.title.trim()){alert('Add an exam title.');return}
- for(const [i,q] of d.qs.entries()){if(!q.q.trim()){alert('Question '+(i+1)+' needs text.');return}
-  if(q.t==='mcq'&&q.o.some(o=>!o.trim())){alert('Fill in all four options for question '+(i+1)+'.');return}
-  if(q.t==='short'&&!String(q.a).trim()){alert('Add an accepted answer for question '+(i+1)+'.');return}}
- D.exams.push(d);save();draft=null;view='exams';render()}
-render();
+ `<label>Accepted answers</label><input value="${esc(q.a)}" oninput="draft.qs[${i}].a=this.value" placeholder="Separate alternatives with |">`)+'</div>').join('')+
+ `<div class="row"><button class="b g" onclick="draft.qs.push(mk('mcq'));render()">Add question</button><button class="b" onclick="saveExam()">Save exam online</button></div><p id="msg"></p>`}
+function setT(i,t){const m=draft.qs[i];draft.qs[i]=Object.assign(mk(t),{q:m.q,m:m.m});render()}
+async function insertExam(d){const {data:e,error}=await sb.from('exams').insert({teacher_id:P.id,title:d.title,subject:d.subject,mins:d.mins,pass:d.pass}).select().single();if(error)throw error;
+ const rows=d.qs.map((q,i)=>({exam_id:e.id,pos:i,type:q.t,q:q.q,options:q.t==='mcq'?q.o:null,answer:String(q.a),marks:q.m}));
+ const {error:e2}=await sb.from('questions').insert(rows);if(e2){await sb.from('exams').delete().eq('id',e.id);throw e2}}
+async function saveExam(){const d=draft;if(!d.title.trim())return msg('Add an exam title.');
+ for(const [i,q] of d.qs.entries()){if(!q.q.trim())return msg('Question '+(i+1)+' needs text.');if(q.t==='mcq'&&q.o.some(o=>!o.trim()))return msg('Fill all four options for question '+(i+1)+'.');if(q.t==='short'&&!String(q.a).trim())return msg('Add an accepted answer for question '+(i+1)+'.')}
+ try{await insertExam(d);draft=null;view='exams';render()}catch(e){msg(e.message)}}
+async function addML(){const M=(q,o,a)=>({t:'mcq',q,o,a,m:1}),T=(q,a)=>({t:'tf',q,a:a?0:1,m:1}),Sh=(q,a)=>({t:'short',q,a,m:2});
+ const qs=[M('Which type of learning uses labelled data?',['Supervised learning','Unsupervised learning','Clustering','Dimensionality reduction'],0),M('Predicting the price of a house is an example of:',['Regression','Classification','Clustering','Association'],0),M('Deciding whether an email is spam or not spam is an example of:',['Regression','Classification','Clustering','Compression'],1),M('K-means is an example of:',['Supervised learning','Reinforcement learning','Unsupervised learning','Regression'],2),M('A Random Forest is made by combining many:',['Decision trees','Linear regressions','Neural networks','Clusters'],0),M('Gini impurity measures:',['Training speed','How mixed the classes are in a node','The number of trees','The learning rate'],1),M('Overfitting means the model:',['Performs poorly on training data','Performs well on training data but poorly on new data','Trains too quickly','Uses too few features'],1),M('The purpose of a test set is to:',['Train the model','Choose the features','Evaluate the model on unseen data','Increase the data size'],2),M('Which metric is used for regression?',['Accuracy','Precision','Recall','Mean Squared Error'],3),M('The share of predicted positives that are truly positive is called:',['Recall','Accuracy','Precision','Mean Squared Error'],2),M('In RAG, the system:',['Only memorises its training data','Retrieves relevant documents, then generates an answer','Deletes old documents','Trains a new model for each question'],1),T('A decision tree can be used for both classification and regression.',1),T('A Gini impurity of 0 means a node is perfectly pure.',1),T('Adding more trees to a Random Forest always causes overfitting.',0),T('Unsupervised learning needs labelled data.',0),Sh('What is the problem called when a model learns the noise in the training data?','Overfitting|overfit'),Sh('Which method trains each tree on a random sample drawn with replacement?','Bagging|Bootstrap|Bootstrap aggregating'),Sh('Which Python library provides RandomForestRegressor?','scikit-learn|sklearn|scikit learn'),Sh('In RAG, what are text chunks converted into so they can be searched by meaning?','Embeddings|Embedding|Vectors')];
+ try{await insertExam({title:'Machine Learning Fundamentals',subject:'Machine Learning',mins:25,pass:50,qs});render()}catch(e){alert(e.message)}}
+init();
 </script>
 </body>
 </html>
