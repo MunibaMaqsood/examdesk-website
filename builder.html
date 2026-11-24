@@ -57,7 +57,7 @@ async function init(){
  const {data}=await sb.auth.getSession();data.session?await enter():render()}
 async function enter(){const {data:{user}}=await sb.auth.getUser();
  const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).single();
- if(error){await sb.auth.signOut();return render()}P=data;view='exams';render()}
+ if(error){await sb.auth.signOut();mode='in';await render();return msg('Profile error: '+error.message)}P=data;view='exams';render()}
 async function logout(){stop();S=null;await sb.auth.signOut();P=null;view='auth';mode='in';render()}
 function go(v){if(S&&!confirm('Leave the exam? Your answers will be lost.'))return;stop();S=null;if(v==='create'&&!draft)newDraft();view=v;render()}
 function nav(){$('#nav').innerHTML=!P||S?'':[['exams','Exams'],...(P.role==='teacher'?[['create','Create exam']]:[]),['results',P.role==='teacher'?'Results':'My results']].map(([k,l])=>`<button class="${view===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('')+`<button onclick="logout()">Sign out (${esc(P.name)})</button>`}
